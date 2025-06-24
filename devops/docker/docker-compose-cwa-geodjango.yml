@@ -1,0 +1,18 @@
+services:
+  cwageodjango:
+    container_name: udtcwageodjango
+    image: cwa_geodjango
+    build:
+      context: ./
+      dockerfile: Dockerfile_cwa_geodjango
+    links:
+      - udtpostgis
+      - udtneo4j
+    volumes:
+      - ../../cwa/cwa_geodjango:/opt/udt/cwa/cwa_geodjango/
+      - ../../cwm:/opt/udt/cwm/
+      - ../../data:/opt/udt/data/
+      - ../../geoserver:/geoserver_scripts
+    env_file:
+      - ./env_files/.django_env
+    restart: always

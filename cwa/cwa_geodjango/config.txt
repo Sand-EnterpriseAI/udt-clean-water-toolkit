@@ -1,0 +1,7 @@
+method = gis2neo4j
+
+srid = 27700
+
+batch_size = 5000
+
+parallel = false

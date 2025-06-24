@@ -1,0 +1,33 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN set -eux; \
+    apt-get update; \
+    apt-get -y --no-install-recommends install \
+        vim \
+        python3.11 \
+        python3-dev \
+        python3-pip \
+        binutils \
+        libproj-dev \
+        gdal-bin \
+        build-essential \
+        libgdal-dev
+
+RUN mkdir -p /opt/udt/cwa/cwa_geoalchemy
+
+RUN mkdir -p /opt/udt/cwm/
+
+RUN mkdir -p /opt/udt/data/
+
+WORKDIR /opt/udt/cwa/cwa_geoalchemy/
+
+
+RUN pip install --upgrade pip
+
+# EXPOSE 8000
+
+ENTRYPOINT ["tail"]
+
+CMD ["-f","/dev/null"]

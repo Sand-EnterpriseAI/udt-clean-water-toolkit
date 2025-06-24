@@ -1,0 +1,20 @@
+services:
+  apidrf:
+    container_name: udtapidrf
+    image: api_drf_staging
+    build:
+      context: ./
+      dockerfile: Dockerfile_api_drf_staging
+      links:
+       - udtpostgis
+       - udtneo4j
+    volumes:
+      - ../../api/api_drf:/opt/udt/api/api_drf/
+      - ../../cwa/cwa_geodjango:/opt/udt/cwa/cwa_geodjango/
+      - ../../data:/opt/udt/data/
+      - ../../geoserver:/geoserver_scripts
+    env_file:
+      - ./env_files/.django_env
+    ports:
+      - "8000:8000"
+    restart: always

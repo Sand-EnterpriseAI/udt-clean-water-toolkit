@@ -1,0 +1,86 @@
+services:
+  udtpostgis:
+    container_name: udtpostgis
+    platform: linux/amd64
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: postgis
+      POSTGRES_USER: postgis
+      POSTGRES_PASSWORD: postgis
+    image: postgis/postgis:16-3.4
+    volumes:
+      - postgis_data:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgis -d postgis"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  udtneo4j:
+    container_name: udtneo4j
+    ports:
+    - "7474:7474"
+    - "7687:7687"
+    env_file:
+    - .env
+    environment:
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_apoc_import_file_use__neo4j__config=true
+      - NEO4J_PLUGINS=\[\"apoc\"\]
+    image: neo4j:5.20.0-community-bullseye
+    volumes:
+    - neo4j-data:/data
+    - neo4j-backups:/backups
+    restart: always
+
+  cwageodjango:
+    container_name: udtcwageodjango
+    image: cwa_geodjango
+    build:
+      context: ./
+      dockerfile: devops/docker/Dockerfile_cwa_geodjango
+    links:
+      - udtpostgis
+      - udtneo4j
+    volumes:
+      - ./cwa/cwa_geodjango:/opt/udt/cwa/cwa_geodjango/
+      - ./cwm:/opt/udt/cwm/
+      - data:/opt/udt/data/
+    env_file:
+      - .env
+    environment:
+      SQID_ALPHABET: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+      # DJANGO_SECRET_KEY__ENV_VAR is now sourced from .env
+      POSTGIS_DB_NAME__ENV_VAR: postgis
+      POSTGIS_DB_USER__ENV_VAR: postgis
+      POSTGIS_DEFAULT_DB_HOST__ENV_VAR: udtpostgis
+      POSTGIS_DEFAULT_DB_PASSWORD__ENV_VAR: postgis
+      POSTGIS_DEFAULT_PORT__ENV_VAR: 5432
+    depends_on:
+      udtpostgis:
+        condition: service_healthy
+      udtneo4j:
+        condition: service_started
+    restart: always
+
+  orchestrator:
+    image: docker:latest
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - ./post_init_setup.sh:/usr/local/bin/post_init_setup.sh
+    command: ["sh", "/usr/local/bin/post_init_setup.sh"]
+    depends_on:
+      cwageodjango:
+        condition: service_started
+    container_name: udtorchestrator
+    restart: "no"
+    
+volumes:
+  data:
+  cwa:
+  postgis_data:
+  neo4j-data:
+  neo4j-backups:

@@ -1,0 +1,1 @@
+from .geodjango_serializer import GeoDjangoSerializer

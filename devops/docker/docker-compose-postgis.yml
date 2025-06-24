@@ -1,0 +1,13 @@
+
+#name: <your project name>
+
+services:
+  udtpostgis:
+    container_name: udtpostgis
+    platform: linux/amd64
+    ports:
+      - 5432:5432
+    env_file:
+      - ./env_files/.db_env
+    image: postgis/postgis
+    restart: always
