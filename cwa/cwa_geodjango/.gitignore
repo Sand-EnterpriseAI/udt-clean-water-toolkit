@@ -1,0 +1,6 @@
+venv
+.env
+
+*.conf
+
+*.log*

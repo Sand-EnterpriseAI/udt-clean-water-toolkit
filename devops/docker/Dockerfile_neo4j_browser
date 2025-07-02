@@ -1,0 +1,30 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+
+RUN set -eux; \
+    apt-get update; \
+    apt-get -y --no-install-recommends install \
+        vim \
+        python3.11 \
+        python3-dev \
+        curl \
+        python3-pip
+
+# https://github.com/neo4j/neo4j-browser/issues/1833
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+
+RUN apt-get install -y nodejs
+
+RUN mkdir -p /opt/udt/ui/neo4j-browser/
+
+WORKDIR /opt/udt/ui/neo4j-browser/
+
+COPY ./ui/neo4j-browser/ .
+
+RUN npm install -g yarn
+
+RUN yarn install
+
+CMD ["yarn", "start-prod"]

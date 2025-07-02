@@ -1,0 +1,9 @@
+geopandas==1.0.1
+numpy==1.26.4
+pandas==2.2.2
+sqids==0.4.1
+networkit
+networkx==3.3
+annotated-types==0.7.0
+neomodel==5.3.2
+Sphinx==8.0.2

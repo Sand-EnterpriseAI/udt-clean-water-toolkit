@@ -1,0 +1,11 @@
+
+services:
+  udtneo4jbrowser:
+    container_name: udtneo4jbrowser
+    image: neo4j_browser
+    build:
+      context: ../../
+      dockerfile: devops/docker/Dockerfile_neo4j_browser
+    ports:
+      - "7475:8080"
+    restart: always

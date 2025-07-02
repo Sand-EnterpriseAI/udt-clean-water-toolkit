@@ -1,0 +1,28 @@
+FROM python:3.11
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+# ARG DEBIAN_FRONTEND=noninteractive
+
+# ensure local python is preferred over distribution python
+# ENV PATH /usr/local/bin:$PATH
+
+RUN mkdir -p /opt/udt/api/api_drf/
+RUN mkdir -p /opt/udt/cwa/cwa_geodjango/ 
+RUN mkdir -p /opt/udt/cwm/ 
+RUN mkdir -p /opt/udt/data/
+
+WORKDIR /opt/udt/api/api_drf/
+
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc libpq-dev libgdal-dev gdal-bin && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install --upgrade pip
+
+# we don't initiate runserver here for dev as it's can be done manually
+ENTRYPOINT ["tail"]
+
+CMD ["-f","/dev/null"]

@@ -1,0 +1,22 @@
+
+volumes:
+   geoserver-data:
+
+services:
+
+   geoserver:
+      image: kartoza/geoserver:2.25.2
+      container_name: udtgeoserver
+      volumes:
+        - geoserver-data:/opt/geoserver/data_dir
+        - ../../geoserver/styles:/styles/
+        - ../../geoserver/setup_styles.sh:/docker-entrypoint-geoserver.d/setup_styles.sh
+      ports:
+        - "8080:8080"
+      restart: on-failure
+      env_file:
+        - ./env_files/.geoserver_env
+      depends_on:
+        - udtpostgis
+
+   
