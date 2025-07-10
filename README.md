@@ -40,7 +40,7 @@ This project is built entirely on open-source technologies:
 
 1.  **Clone the Repository**
     ```bash
-    git clone https://github.com/Explore-AI/udt-clean-water-toolkit.git
+    git clone https://github.com/Sand-EnterpriseAI/udt-clean-water-toolkit.git
     cd udt-clean-water-toolkit
     ```
 
