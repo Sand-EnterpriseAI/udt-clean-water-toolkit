@@ -40,7 +40,7 @@ This project is built entirely on open-source technologies:
 
 1.  **Clone the Repository**
     ```bash
-    git clone https://github.com/Explore-AI/udt-clean-water-toolkit.git
+    git clone https://github.com/Sand-EnterpriseAI/udt-clean-water-toolkit.git
     cd udt-clean-water-toolkit
     ```
 
@@ -90,13 +90,13 @@ The toolkit includes a command to generate a sample network, including pipes, hy
 
 Run the following command from your host machine's terminal:
 ```bash
-docker-compose exec udtcwageodjango python manage.py generate_synthetic_network
+docker-compose exec cwageodjango python3 manage.py generate_synthetic_network
 ```
 This will populate the PostGIS database with a ready-to-use sample network.
 
 Once the data is in PostGIS, you can load it into Neo4j to visualize and query it as a graph. Run the following command:
 ```bash
-docker-compose exec udtcwageodjango python3 manage.py load_network_to_neo4j
+docker-compose exec cwageodjango python3 manage.py load_network_to_neo4j
 ```
 
 #### Option 2: Use Your Own Data
@@ -117,7 +117,8 @@ Here is an example of how to ingest a layer of water mains data from a GeoPackag
 ```bash
 # The -f flag points to the path inside the container
 # The -x flag is the layer index (0 for the first layer)
-docker-compose exec udtcwageodjango python manage.py layer_tw_mains_to_sql -f /opt/udt/data/your_data_file.gpkg -x 0
+docker-compose exec cwageodjango python3
+manage.py layer_tw_mains_to_sql -f /opt/udt/data/your_data_file.gpkg -x 0
 ```
 
 You can find other ingestion scripts in `cwa/cwa_geodjango/cwageodjango/core/scripts/`.
